@@ -1,11 +1,8 @@
-[package]
-name = "indexer-core"
-version = "0.1.0"
-edition = "2021"
+[workspace]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+resolver = "2"
 
-[dependencies]
-tokio = { version = "1.35.1", features = ["rt-multi-thread", "macros"] }
-futures = "0.3.30"
-solana-client = "1.17.13"
+members = [
+    "entity",
+    "indexer-core"
+]
