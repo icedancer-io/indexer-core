@@ -1,11 +1,4 @@
-use std::env;
-
 #[no_mangle]
-pub extern "C" fn add() -> i32 {
-    // let args: Vec<String> = env::args().collect();
-    // let a: i32 = args[1].parse().unwrap();
-    // let b: i32 = args[2].parse().unwrap();
-    // a + b
-
-    7
+pub extern "C" fn add(a: i32, b: i32) -> i32 {
+    a + b
 }

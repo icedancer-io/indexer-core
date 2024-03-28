@@ -14,7 +14,7 @@ fn main() {
     let instance = Instance::new(&mut store, &module, &import_object).unwrap();
 
     let add_function = instance.exports.get_function("add").unwrap();
-    let result = add_function.call(&mut store, &[]).unwrap();
+    let result = add_function.call(&mut store, &[3i32.into(), 4i32.into()]).unwrap();
     println!("result {:?}", result);
 
     assert_eq!(result[0], Value::I32(7));
