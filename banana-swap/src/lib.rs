@@ -1,21 +1,11 @@
-use wasm_bindgen::prelude::*;
+use std::env;
 
-#[wasm_bindgen]
-pub fn process_data(data: &[u8]) -> Vec<u8> {
-    // Process the data here, for example, simply double each byte
-    vec![7]
-}
+#[no_mangle]
+pub extern "C" fn add() -> i32 {
+    // let args: Vec<String> = env::args().collect();
+    // let a: i32 = args[1].parse().unwrap();
+    // let b: i32 = args[2].parse().unwrap();
+    // a + b
 
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let data: [u8; 1] = [0];
-
-        let result = process_data(&data);
-        assert_eq!(result, vec![7]);
-    }
+    7
 }
