@@ -4,6 +4,5 @@ resolver = "2"
 
 members = [
     "banana-swap",
-    "entity",
     "indexer-core"
 ]
