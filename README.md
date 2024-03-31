@@ -1,3 +1,9 @@
+# Running WASM
+
+```
+cd banana-swap && cargo build --target wasm32-unknown-unknown --release && cd .. && cp ./target/wasm32-unknown-unknown/release/banana_swap.wasm indexer-core/src/banana_swap.wasm && cargo run --bin indexer-core
+```
+
 # Research
 
 - Important: in good indexing, simply look at the event to reconstruct off-chain state. We don't have cost restrictions when emitting more fields unlike in Solana.
