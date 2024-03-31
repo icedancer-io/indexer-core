@@ -553,6 +553,7 @@ dependencies = [
  "base64 0.22.0",
  "borsh 1.4.0",
  "regex",
+ "wasm-bindgen",
 ]
 
 [[package]]
