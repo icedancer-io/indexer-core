@@ -6,7 +6,7 @@ use regex::Regex;
 struct SwapEvent {
     market: Pubkey,
     amount_in: u64,
-    amount_out: u64
+    amount_out: u64,
 }
 
 fn extract_base64(logs: &[&str], program_address: &str) -> Vec<String> {
@@ -54,7 +54,10 @@ fn main() {
     let base64_strings = extract_base64(&logs, program_address);
 
     if base64_strings.is_empty() {
-        println!("Base64 strings not found for program address {}", program_address);
+        println!(
+            "Base64 strings not found for program address {}",
+            program_address
+        );
     } else {
         println!("Base64 Strings:");
         for base64_string in base64_strings {

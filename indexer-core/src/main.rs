@@ -1,6 +1,7 @@
 pub mod get_tx_data;
 
-use wasmer::{imports, Cranelift, Instance, Module, Store, Value};
+use crate::get_tx_data::get_tx_data;
+use wasmer::{imports, Instance, Module, Store, Value};
 
 fn main() {
     // Read the Wasm file
@@ -8,9 +9,6 @@ fn main() {
 
     // Create a store
     let mut store = Store::default();
-
-    // let compiler = Cranelift::default();
-    // let mut store = Store::new(compiler);
 
     // Compile the module
     let module = Module::new(&store, wasm_bytes).unwrap();
@@ -22,15 +20,27 @@ fn main() {
     let function = instance.exports.get_function("process_bytes").unwrap();
 
     // Example byte array
-    let byte_array: Vec<u8> = vec![0x48, 0x65, 0x6C, 0x6C, 0x6F];
+    let byte_array: Vec<u8> = vec![0x1, 0x65, 0x6C, 0x6C, 0x6F];
+
+    // Write array to guest memory
+    let memory = instance.exports.get_memory("memory").unwrap();
+    let view = memory.view(&store);
+
+    // Cannot be 0 because null is disallowed in Rust references.
+    view.write(1, &byte_array).unwrap();
 
     // Call the exported function with the byte array
-    let result = function.call(&mut store, &[
-        Value::I32(byte_array.as_ptr() as i32),
-        Value::I32(byte_array.len() as i32)
-    ]).unwrap();
+    let result = function
+        .call(
+            &mut store,
+            &[
+                // Value::I32(byte_array.as_ptr() as i32),
+                Value::I32(1),
+                Value::I32(byte_array.len() as i32),
+            ],
+        )
+        .unwrap();
 
     // Check the result
     println!("Result: {:?}", result);
-
 }

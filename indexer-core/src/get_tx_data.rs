@@ -1,6 +1,9 @@
 use std::str::FromStr;
 
-use anchor_lang::prelude::{borsh::{BorshDeserialize, BorshSerialize}, *};
+use anchor_lang::prelude::{
+    borsh::{BorshDeserialize, BorshSerialize},
+    *,
+};
 
 #[derive(Debug, BorshSerialize, BorshDeserialize)]
 pub struct TxData {
