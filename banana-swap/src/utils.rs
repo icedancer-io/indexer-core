@@ -8,7 +8,7 @@ pub struct TxData {
     pub logs: Vec<String>,
 }
 
-pub fn extract_base64(logs: Vec::<String>, program_address: &str) -> Vec<String> {
+pub fn extract_base64(logs: Vec<String>, program_address: &str) -> Vec<String> {
     let mut program_stack = Vec::<String>::new();
     let mut base64_strings = Vec::<String>::new();
 
@@ -41,7 +41,7 @@ pub fn extract_base64(logs: Vec::<String>, program_address: &str) -> Vec<String>
 
 // Host functions
 extern "C" {
-    pub fn get_counter() -> i32;
+    pub fn get_volume() -> i64;
 
-    pub fn add_to_counter(add: i32) -> i32;
+    pub fn set_volume(add: i64);
 }

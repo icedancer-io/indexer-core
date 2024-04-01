@@ -1,6 +1,6 @@
-use borsh::BorshDeserialize;
-use utils::{add_to_counter, extract_base64, get_counter, TxData};
 use base64::prelude::*;
+use borsh::BorshDeserialize;
+use utils::{extract_base64, get_volume, set_volume, TxData};
 
 mod utils;
 
@@ -25,26 +25,23 @@ impl SwapEvent {
 }
 #[no_mangle]
 pub extern "C" fn process_bytes(ptr: *const u8, len: usize) -> u64 {
-    // let mut bytes = unsafe { std::slice::from_raw_parts(ptr, len) };
-    // let tx_data = TxData::deserialize(&mut bytes).unwrap();
+    let mut bytes = unsafe { std::slice::from_raw_parts(ptr, len) };
+    let tx_data = TxData::deserialize(&mut bytes).unwrap();
 
-    // let events = extract_base64(tx_data.logs, PROGRAM_ADDRESS);
+    let events = extract_base64(tx_data.logs, PROGRAM_ADDRESS);
 
-    // for string_event in &events {
-    //     let event = SwapEvent::decode(string_event);
+    let mut total_volume = unsafe { get_volume() } as u64;
 
-    //     // Process the event and store the result in database
-    // };
+    for string_event in &events {
+        let event = SwapEvent::decode(string_event);
 
-    // events.len() as u64
+        // Process the event and store the result in database
+        total_volume += event.amount_out;
+    }
 
-    unsafe {
-        add_to_counter(1)
-    };
+    assert!(total_volume <= i64::MAX as u64);
 
-    let counter = unsafe {
-        get_counter()
-    };
+    unsafe { set_volume(total_volume as i64) };
 
-    counter as u64
+    total_volume
 }
