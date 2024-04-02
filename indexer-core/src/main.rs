@@ -57,13 +57,21 @@ fn main() {
 
     let txs = get_tx_data();
 
+    let mut last_length: Option<usize> = None;
+
     for tx in &txs {
         let tx_serialized = to_vec(tx).unwrap();
 
         let view = memory.view(&store);
+
+        if let Some(length) = last_length {
+            let clear_data = vec![0u8; length];
+            view.write(1, &clear_data).unwrap();
+        }
+
         view.write(1, &tx_serialized).unwrap();
 
-        function
+        let result = function
             .call(
                 &mut store,
                 &[
@@ -72,6 +80,10 @@ fn main() {
                 ],
             )
             .unwrap();
+
+        println!("result {:?}", result);
+
+        last_length = Some(tx_serialized.len());
     }
 
     let volume = *volume_counter.lock().unwrap();

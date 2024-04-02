@@ -16,13 +16,18 @@ struct SwapEvent {
 impl SwapEvent {
     pub fn decode(string_event: &String) -> Self {
         let decoded_bytes = BASE64_STANDARD.decode(string_event).unwrap();
-        let mut slice = decoded_bytes.as_slice();
+        let slice = decoded_bytes.as_slice();
 
-        let parsed_event = SwapEvent::deserialize(&mut slice).unwrap();
+        // remove discriminator bits
+        // TODO calculate length and remove
+        let mut slice_without_discriminator = &slice[8..];
+
+        let parsed_event = SwapEvent::deserialize(&mut slice_without_discriminator).unwrap();
 
         parsed_event
     }
 }
+
 #[no_mangle]
 pub extern "C" fn process_bytes(ptr: *const u8, len: usize) -> u64 {
     let mut bytes = unsafe { std::slice::from_raw_parts(ptr, len) };
@@ -44,4 +49,19 @@ pub extern "C" fn process_bytes(ptr: *const u8, len: usize) -> u64 {
     unsafe { set_volume(total_volume as i64) };
 
     total_volume
+}
+
+#[cfg(test)]
+mod test {
+    use crate::SwapEvent;
+
+    #[test]
+    fn decode() {
+        let string_event = String::from(
+            "QMbN6CYIceLFI/WD+W7U/b2K3hZfjf5VM8EPoCGiKj8x5UrcAgMWYegDAAAAAAAAZAAAAAAAAAA=",
+        );
+
+        let event = SwapEvent::decode(&string_event);
+        println!("event {:?}", event);
+    }
 }
